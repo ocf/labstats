@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # initializes the database
-import db
+import labstats.db as db
 
 cnx = db.get_connection()
 cursor = cnx.cursor()
