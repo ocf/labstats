@@ -7,7 +7,7 @@ def get_top_users(num, start, end):
 	cursor = cnx.cursor()
 
 	query = """
-		SELECT `user`, SUM(TIMEDIFF(`end`, `start`)) AS `duration` FROM `session`
+		SELECT `user`, SUM(TIME_TO_SEC(TIMEDIFF(`end`, `start`))) AS `duration` FROM `session`
 			WHERE  (
 				`end` IS NOT NULL AND
 				(`start` BETWEEN %s AND %s OR `end` BETWEEN %s AND %s))
