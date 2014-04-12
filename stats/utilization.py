@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from labstats import settings, db
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import sys
 
 def get_utilization(host, start, end):
@@ -53,14 +53,14 @@ class UtilizationProfile:
 		return any(s[0] <= datetime <= s[1] for s in self.sessions)
 
 if __name__ == "__main__":
-	start = datetime(2014, 2, 19, 9) # 9am feb 19, 2014
-	end = datetime(2014, 2, 19, 18) # 6pm
+	yesterday = date.today() - timedelta(1)
+	day = date.today() if datetime.now().hour > 18 else yesterday
+
+	start = datetime(day.year, day.month, day.day, 9) # 9am
+	end = datetime(day.year, day.month, day.day, 18) # 6pm
 	print("Utilization of lab between {} and {}:".format(start, end))
 
 	for fullhost, host in settings.LAB_HOSTNAMES.items():
 		print()
 		profile = get_utilization(fullhost, start, end)
 		generate_image(host, profile)
-
-#import code
-#code.interact(local=locals())
