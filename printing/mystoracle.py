@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+from datetime import datetime, date, timedelta
+import os.path
+
+DATA_DIR = '/services/http/users/t/tzhu/printing/history'
+PRINTERS = ('logjam', 'deforestation')
+
+def load_data(printer):
+    csv_path = os.path.join(DATA_DIR, printer + '.csv')
+
+    with open(csv_path) as csv:
+        def read_line(line):
+            parts = line.strip().split(',')
+            timestamp, pages = float(parts[0]), int(parts[1])
+            return datetime.fromtimestamp(timestamp), pages
+
+        return list(map(read_line, csv))
+
+def pages_in_range(data, start, end):
+    pages_start = None
+
+    for time, pages in data:
+        if time > start and pages_start is None:
+            pages_start = pages
+        elif time > end:
+            break
+
+    return pages - pages_start
+
+if __name__ == '__main__':
+    data = {printer: load_data(printer) for printer in PRINTERS}
+
+    one_day = timedelta(days=1)
+    time = datetime.combine(date.today(), datetime.min.time()) + one_day
+
+    cols = ('date', 'total') + PRINTERS
+    col_format = '{:>18}' * len(cols)
+    print(col_format.format(*cols))
+
+    for _ in range(30):
+        def num_pages(printer):
+            return pages_in_range(data[printer], time - one_day, time)
+
+        pages = tuple(map(num_pages, PRINTERS))
+        cols = ((time - one_day).strftime('%a %b %d'), sum(pages)) + pages
+        print(col_format.format(*cols))
+
+        time -= one_day
