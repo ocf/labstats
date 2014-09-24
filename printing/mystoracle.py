@@ -2,7 +2,7 @@
 from datetime import datetime, date, timedelta
 import os.path
 
-DATA_DIR = '/services/http/users/t/tzhu/printing/history'
+DATA_DIR = '/opt/stats/printing/history'
 PRINTERS = ('logjam', 'deforestation')
 
 def load_data(printer):

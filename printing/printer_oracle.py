@@ -2,8 +2,8 @@
 
 import time, subprocess, os
 
-check_toner = "python ~/check_toner/check_toner.py"
-dest_dir = "~/public_html/printing/oracle/"
+check_toner = "python /opt/stats/labstats/printing/check_toner/check_toner.py"
+dest_dir = "/opt/stats/printing/oracle/"
 targets = ["deforestation", "logjam"]
 suffix = ".csv"
 popen = {"shell": True, "stdout": subprocess.PIPE}
