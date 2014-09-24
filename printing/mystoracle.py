@@ -25,6 +25,9 @@ def pages_in_range(data, start, end):
         elif time > end:
             break
 
+    if not pages_start:
+        return 0
+
     return pages - pages_start
 
 if __name__ == '__main__':
