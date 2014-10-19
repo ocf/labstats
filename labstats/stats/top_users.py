@@ -32,4 +32,4 @@ if __name__ == "__main__":
 	for i, (user, seconds) in enumerate(get_top_users(num, start, end)):
 		hours, seconds = divmod(seconds, 3600)
 		minutes = seconds // 60
-		print("\t{}. {}: {}h {}m".format(i + 1, user, int(hours), int(minutes)))
+		print("\t{}. \t{:<9} {:>4}h {}m".format(i + 1, user, int(hours), int(minutes)))
