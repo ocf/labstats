@@ -9,7 +9,9 @@ from labstats import settings, db
 from labstats.stats import utilization
 from datetime import datetime, timedelta, date
 
-graph_dpi=75
+graph_dpi=80
+#Binomial-shaped weights for moving average
+average_weights = ((-2, 1/16), (-1, 4/16), (0, 6/16), (1, 4/16), (2, 1/16))
 
 def generate_image(profiles, hosts, start, end, dest):
 	"""Generates an image representing usage of the lab at minute resolution
@@ -17,21 +19,31 @@ def generate_image(profiles, hosts, start, end, dest):
 
 	stats = [0, 0]
 	minutes = int((end - start).total_seconds() // 60)
+	now = datetime.now()
+	if now >= end or now <= start:
+		now = None
+	minute_now = None if not now else int((now - start).total_seconds() // 60)
 	sums = []
 	
 	for minute in range(minutes):
 		instant = start + timedelta(minutes=minute, seconds=30)
-		in_use = sum(1 if profile.in_use(instant) else 0 for profile in profiles)
+		in_use = sum(1 if profile.in_use(instant, now) \
+			else 0 for profile in profiles)
 
 		sums.append(in_use)
 	
-	#Do a simple weighted moving average to smooth out the data
+	#Do a weighted moving average to smooth out the data
 	processed = [0] * len(sums)
 	for i in range(len(sums)):
-		for j in range(-2, 3):
-			processed[i] += 0 if (i+j < 0 or i+j >= len(sums)) else (3-abs(j))*sums[i+j]
-		processed[i] /= 9
-	sums = processed
+		for delta_i, weight in average_weights:
+			m = i if (i+delta_i < 0 or i+delta_i >= len(sums)) else i+delta_i
+			#Don't use data that hasn't occurred yet
+			if minute_now and i <= minute_now and m >= minute_now:
+				processed[i] += weight * sums[i]
+			elif minute_now and i > minute_now:
+				processed[i] = 0
+			else:
+				processed[i] += weight * sums[m]
 	h = lambda h: h if h <= 12 else h - 12
 	p = lambda h: "am" if h <= 11 else "pm"
 	hours = ["{}{}".format(h(hour), p(hour)) for hour in range(start.hour, start.hour + minutes // 60)]
@@ -39,7 +51,10 @@ def generate_image(profiles, hosts, start, end, dest):
 	x = list(range(minutes))
 	plt.figure(figsize=(10,6))
 	plt.grid(True)
-	plt.plot(x, sums, color="k", linewidth=1.5)
+	plt.plot(x, processed, color="k", linewidth=1.5)
+	#Draw a vertical line, if applicable, showing current time
+	if minute_now:
+		plt.axvline(minute_now, linewidth=1.5)
 	plt.xlim(0, minutes)
 	plt.xticks(np.arange(0, minutes, 60), hours)
 	plt.xlabel("Time")
