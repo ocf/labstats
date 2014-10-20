@@ -26,7 +26,7 @@ def get_utilization(host, start, end):
 
 	return UtilizationProfile(start, end, [session for session in cursor])
 
-def generate_image(name, profile):
+def generate_image(name, profile, now=None):
 	"""Generates an image representing usage of the machine at minute
 	resolution."""
 
@@ -35,10 +35,11 @@ def generate_image(name, profile):
 	
 	for minute in range(minutes):
 		instant = profile.start + timedelta(minutes=minute, seconds=30)
-		in_use = profile.in_use(instant)
+		in_use = profile.in_use(instant, now)
 		stats[1 if in_use else 0] += 1
 	
-	print(col_format.format(name, stats[1], stats[0], str(round(stats[1] / sum(stats) * 100, 2)) + "%"))
+	print(col_format.format(name, stats[1], stats[0], \
+			str(round(stats[1] / sum(stats) * 100, 2)) + "%"))
 
 
 	#print(col_format.format(name))
@@ -55,12 +56,16 @@ class UtilizationProfile:
 		self.end = end
 		self.sessions = sessions
 
-	def in_use(self, datetime):
-		return any(s[0] <= datetime <= s[1] for s in self.sessions)
+	def in_use(self, datetime, now=None):
+		if now:
+			return any(s[0] <= datetime and datetime <= now and \
+				(not s[1] or datetime <= s[1]) for s in self.sessions)
+		return any(s[0] <= datetime and s[1] and \
+			datetime <= s[1] for s in self.sessions)
 
 if __name__ == "__main__":
 	yesterday = date.today() - timedelta(1)
-	day = date.today() if datetime.now().hour > 18 else yesterday
+	day = date.today()# if datetime.now().hour > 18 else yesterday
 
 	start = datetime(day.year, day.month, day.day, 9) # 9am
 	end = datetime(day.year, day.month, day.day, 18) # 6pm
@@ -72,4 +77,4 @@ if __name__ == "__main__":
 	print("-" * len(col_format.format(*cols)))
 	for fullhost, host in settings.LAB_HOSTNAMES.items():
 		profile = get_utilization(fullhost, start, end)
-		generate_image(host, profile)
+		generate_image(host, profile, datetime.now())
