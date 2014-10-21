@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, date
 import sys
 
 cols = ('Computer', 'Busy', 'Idle', '%Usage')
-col_format = '{:<14}{:>5}{:>7}{:>9}'
+col_format = '{:<13}{:>8}{:>9}{:>12}'
 
 def get_utilization(host, start, end):
 	"""Return a UtilizationProfile for the given host between datetime
@@ -75,6 +75,8 @@ if __name__ == "__main__":
 	print()
 	print(col_format.format(*cols))
 	print("-" * len(col_format.format(*cols)))
-	for fullhost, host in settings.LAB_HOSTNAMES.items():
+	hosts = list(settings.LAB_HOSTNAMES.items())
+	hosts.sort()
+	for fullhost, host in hosts:
 		profile = get_utilization(fullhost, start, end)
 		generate_image(host, profile, datetime.now())

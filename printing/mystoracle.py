@@ -37,7 +37,7 @@ if __name__ == '__main__':
     time = datetime.combine(date.today(), datetime.min.time()) + one_day
 
     cols = ('date', 'total') + PRINTERS
-    col_format = '{:>18}' * len(cols)
+    col_format = '{:>13}{:>13}' + '{:>16}' * (len(cols) - 2)
     print(col_format.format(*cols))
 
     for _ in range(30):
