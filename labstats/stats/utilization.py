@@ -19,10 +19,11 @@ def get_utilization(host, start, end):
 			    `start` BETWEEN %s AND %s OR
 				`end` BETWEEN %s AND %s OR
 				%s BETWEEN `start` AND `end` OR
-				%s BETWEEN `start` AND `end`)
+				%s BETWEEN `start` AND `end` OR
+				`start` <= %s AND `end` IS NULL )
 			ORDER BY `start` ASC"""
 
-	cursor.execute(query, (host, start, end, start, end, start, end))
+	cursor.execute(query, (host, start, end, start, end, start, end, start))
 
 	return UtilizationProfile(start, end, [session for session in cursor])
 
@@ -38,7 +39,10 @@ def generate_image(name, profile, now=None):
 		in_use = profile.in_use(instant, now)
 		stats[1 if in_use else 0] += 1
 	
-	print(col_format.format(name, stats[1], stats[0], \
+	if minutes == 0:
+		print(col_format.format(name, stats[1], stats[0], str(0.0) + "%"))
+	else:
+		print(col_format.format(name, stats[1], stats[0], \
 			str(round(stats[1] / sum(stats) * 100, 2)) + "%"))
 
 
@@ -58,14 +62,14 @@ class UtilizationProfile:
 
 	def in_use(self, datetime, now=None):
 		if now:
-			return any(s[0] <= datetime and datetime <= now and \
+			return any(s[0] <= datetime <= now and \
 				(not s[1] or datetime <= s[1]) for s in self.sessions)
-		return any(s[0] <= datetime and s[1] and \
-			datetime <= s[1] for s in self.sessions)
+		return any(s[0] <= datetime and \
+			(not s[1] or datetime <= s[1]) for s in self.sessions)
 
 if __name__ == "__main__":
 	yesterday = date.today() - timedelta(1)
-	day = date.today()# if datetime.now().hour > 18 else yesterday
+	day = date.today() if datetime.now().hour >= 9 else yesterday
 
 	start = datetime(day.year, day.month, day.day, 9) # 9am
 	end = datetime(day.year, day.month, day.day, 18) # 6pm
