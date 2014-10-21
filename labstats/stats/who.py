@@ -23,6 +23,6 @@ if __name__ == "__main__":
 		seconds = (datetime.now() - start).total_seconds()
 		hours, seconds = divmod(seconds, 3600)
 		minutes = seconds // 60
-		print("\t{}: {}, {}h {}m".format(settings.LAB_HOSTNAMES[host], user, int(hours), int(minutes)))
+		print("{:>15}:  {:<12} {:>2}h {:>2}m".format(settings.LAB_HOSTNAMES[host], user, int(hours), int(minutes)))
 
 	print("Total: {}".format(len(current_users)))
