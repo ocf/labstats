@@ -66,11 +66,15 @@ def generate_image(profiles, hosts, start, end, dest):
 	plt.savefig(dest, dpi=graph_dpi, bbox_inches='tight')
 
 if __name__ == "__main__":
+	default_day = date.today() if datetime.now().hour >= 9 else date.today().timedelta(1)
+
 	parser = argparse.ArgumentParser(description="Generate utilization graphs")
-	parser.add_argument("--date", type=str, dest="lookup_date", default=date.today().isoformat(),
-			help="Date to generate graphs for")
-	parser.add_argument("--destination", type=str, dest="dest", default=os.path.join(os.getcwd(), "labstats.png"),
-			help="Destination file name and path for output graph")
+	parser.add_argument("--date", type=str, dest="lookup_date", \
+		default=default_day.isoformat(), \
+		help="Date to generate graphs for")
+	parser.add_argument("--destination", type=str, dest="dest", \
+		default=os.path.join(os.getcwd(), "labstats.png"),
+		help="Destination file name and path for output graph")
 	args = parser.parse_args()
 
 	day = datetime.strptime(args.lookup_date, "%Y-%m-%d")
