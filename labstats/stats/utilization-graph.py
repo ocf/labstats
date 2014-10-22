@@ -66,7 +66,7 @@ def generate_image(profiles, hosts, start, end, dest):
 	plt.savefig(dest, dpi=graph_dpi, bbox_inches='tight')
 
 if __name__ == "__main__":
-	default_day = date.today() if datetime.now().hour >= 9 else date.today().timedelta(1)
+	default_day = date.today() if datetime.now().hour >= 9 else date.today() - timedelta(1)
 
 	parser = argparse.ArgumentParser(description="Generate utilization graphs")
 	parser.add_argument("--date", type=str, dest="lookup_date", \
