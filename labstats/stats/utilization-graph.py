@@ -11,7 +11,8 @@ from datetime import datetime, timedelta, date
 
 graph_dpi=80
 #Binomial-shaped weights for moving average
-average_weights = ((-2, 1/16), (-1, 4/16), (0, 6/16), (1, 4/16), (2, 1/16))
+average_weights = tuple(zip(range(-2, 3), \
+			(n/16 for n in (1, 4, 6, 4, 1)) ))
 
 def generate_image(profiles, hosts, start, end, dest):
 	"""Generates an image representing usage of the lab at minute resolution
@@ -26,10 +27,10 @@ def generate_image(profiles, hosts, start, end, dest):
 	sums = []
 	
 	for minute in range(minutes):
-		instant = start + timedelta(minutes=minute, seconds=30)
-		in_use = sum(1 if profile.in_use(instant, now) \
-			else 0 for profile in profiles)
-
+		instant15 = start + timedelta(minutes=minute, seconds=15)
+		instant45 = start + timedelta(minutes=minute, seconds=45)
+		in_use = sum(1 if profile.in_use(instant15, now) \
+			or profile.in_use(instant45, now) else 0 for profile in profiles)
 		sums.append(in_use)
 	
 	#Do a weighted moving average to smooth out the data
