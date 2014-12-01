@@ -20,7 +20,7 @@ def pages_in_range(data, start, end):
     pages_start = None
 
     for time, pages in data:
-        if time > start and pages_start is None:
+        if start <= time < end and pages_start is None:
             pages_start = pages
         elif time > end:
             break
