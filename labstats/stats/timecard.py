@@ -25,7 +25,7 @@ def generate_image(usage, user, dest):
 	plt.ylabel("# Times Present")
 	plt.ylim(0, max(sums) * 1.15)
 
-	plt.title("OCF Lab Timecard for {} (Spring 2014)".format(user))
+	plt.title("OCF Lab Timecard for {} (Fall 2014)".format(user))
 	plt.savefig(dest, bbox_inches="tight")
 
 def get_usage_count(user):
@@ -34,7 +34,7 @@ def get_usage_count(user):
 	cnx = db.get_connection()
 	cursor = cnx.cursor()
 
-	time = datetime(2014, 2, 15, 9) # 9am feb 15, 2014
+	time = datetime(2014, 8, 21, 9) # 9am aug 21, 2014
 	now = datetime.now()
 	step = timedelta(minutes=60)
 
