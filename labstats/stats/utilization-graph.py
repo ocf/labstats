@@ -74,7 +74,7 @@ if __name__ == "__main__":
 		default=default_day.isoformat(), \
 		help="Date to generate graphs for")
 	parser.add_argument("--destination", type=str, dest="dest", \
-		default=os.path.join(os.getcwd(), "labstats.png"),
+		default=os.path.join(os.getcwd(), "labstats.svg"),
 		help="Destination file name and path for output graph")
 	args = parser.parse_args()
 

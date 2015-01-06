@@ -11,7 +11,7 @@ echo '
 <body>
 <font size=4>'
 
-echo '<img src="/lab-usage-graph.png"></img>'
+echo '<img src="/lab-usage-graph.svg"></img>'
 
 echo -e "<pre>============================</pre>\n<pre>"
 /opt/stats/labstats/labstats/stats/who.py
