@@ -1,0 +1,9 @@
+#!/bin/bash -e
+/opt/stats/labstats/printing/oracle.py
+/opt/stats/labstats/printing/historacle.py
+
+# mystoracle
+tmp=$(mktemp)
+/opt/stats/labstats/printing/mystoracle.py > "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/mystoracle

@@ -18,19 +18,19 @@ echo -e "<pre>============================</pre>\n<pre>"
 echo "</pre>"
 
 echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/top_users.txt
+cat /opt/stats/var/top_users
 echo '</pre>'
 
 echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/toner
+cat /opt/stats/var/toner
 echo '</pre>'
 
 echo '<pre>'
-cat /opt/stats/mystoracle.txt
+cat /opt/stats/var/mystoracle
 echo '</pre>'
 
 echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/utilization.txt
+cat /opt/stats/var/utilization
 echo '</pre>'
 
 echo '<p><a href="/printing/oracle/">Historical Toner Levels</a> | <a href="/printing/historacle/">Historical Paper Counts</a></p>'

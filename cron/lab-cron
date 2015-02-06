@@ -1,0 +1,23 @@
+#!/bin/bash -e
+export PYTHONPATH=/opt/stats/labstats
+
+# close old sessions
+/opt/stats/labstats/labstats/bin/close_old_sessions.py
+
+# utilization graph
+tmp=$(mktemp --suffix=".svg")
+/opt/stats/labstats/labstats/stats/utilization-graph.py --destination "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/lab-usage-graph.svg
+
+# top users
+tmp=$(mktemp)
+/opt/stats/labstats/labstats/stats/top_users.py > "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/top_users
+
+# utilization table
+tmp=$(mktemp)
+/opt/stats/labstats/labstats/stats/utilization.py > "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/utilization
