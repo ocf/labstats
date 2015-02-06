@@ -7,7 +7,7 @@
 $printers = array();
 $global_max = 0;
 
-foreach (glob("*.csv") as $fn) {
+foreach (glob("/opt/stats/printing/oracle/*.csv") as $fn) {
   $this_printer = array();
   $rows = file($fn, FILE_IGNORE_NEW_LINES);
   $this_printer['name'] = substr($fn, 0, strrpos($fn, "."));

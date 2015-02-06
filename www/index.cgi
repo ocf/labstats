@@ -33,6 +33,8 @@ echo -e "<pre>============================</pre>\n<pre>"
 cat /opt/stats/utilization.txt
 echo '</pre>'
 
+echo '<p><a href="/printing/oracle/">Historical Toner Levels</a> | <a href="/printing/historacle/">Historical Paper Counts</a></p>'
+
 echo '
 </font>
 </body>
