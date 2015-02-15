@@ -2,60 +2,40 @@
 import os
 import os.path
 import re
-import requests
 import tempfile
-import urllib
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
-# disable https warnings (printers have bad certs)
-requests.packages.urllib3.disable_warnings()
+from ocflib.printing.printers import PRINTERS, get_toner
 
-REGEX_PRINTED = \
-    '<div class="hpDataItemTitle" id="msg-9079">Pages printed with this supply:</div><div class="hpDataItemValue">(.*?)</div>'
-REGEX_REMAINING = \
-    '<div class="hpDataItemTitle" id="msg-9429">Approximate Pages Remaining:</div><div class="hpDataItemValue">(.*?)</div>'
-REGEX_PERCENT = \
-    '<td class="hpConsumableBlockHeaderPctRemaining"><span class="hpConsumableBlockHeaderText">(.*?)%</span>'
 
-PRINTERS = ['deforestation', 'logjam']
 TONER_FILE = '/opt/stats/var/toner'
 
-# each percent is about 300 pages
 THRESHOLDS = [
-    (15, 'LOW'),  # about a day's notice
-    (5, 'VERY LOW'),
-    (1, 'EMPTY')
+    (3000, 'LOW'),
+    (1000, 'VERY LOW'),
+
+    # it claims to have pages left, but at ~300 they become too poor quality
+    (300, 'EMPTY')
 ]
 
 
-def get_toner(printer):
-    url = "https://" + printer + "/hp/device/this.LCDispatcher?nav=hp.Supplies"
-    r = requests.get(url, verify=False)
-
-    def match(regex, content):
-        return int(re.search(regex, content).group(1))
-
-    return [match(regex, r.content.decode("utf-8"))
-            for regex in (REGEX_PRINTED, REGEX_REMAINING, REGEX_PERCENT)]
-
-
-def get_old_percentages():
-    """Parse the old toner file to get the percentages."""
+def get_old_remainings():
+    """Parse the old toner file to get the remainings."""
     if not os.path.isfile(TONER_FILE):
         return defaultdict(int)
 
     def parse(line):  # this is so bad
         printer = line.split(":")[0]
-        match = re.search('([0-9]*)%', line)
+        match = re.search('remaining=([0-9]*) ', line)
         return printer, int(match.group(1)) if match else 0
 
     with open(TONER_FILE) as f:
-        return {printer: percentage for printer, percentage in map(parse, f)}
+        return {printer: remaining for printer, remaining in map(parse, f)}
 
 
 if __name__ == '__main__':
-    old_percents = get_old_percentages()
+    old_remainings = get_old_remainings()
 
     # probably overkill; atomically overwrite the file to avoid glitchiness
     tmp_fd, tmp_path = tempfile.mkstemp()
@@ -64,12 +44,16 @@ if __name__ == '__main__':
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         for name, details in zip(PRINTERS, executor.map(get_toner, PRINTERS)):
-            printed, remaining, percent = details
+            remaining, pages_per_toner = details
+            printed = pages_per_toner - remaining
+            percent = int(100 * remaining / pages_per_toner)
+
             print("{}: printed={}, remaining={} ({}%)".format(
                   name, printed, remaining, percent), file=tmp_file)
 
             for threshold, warning in reversed(THRESHOLDS):
-                if percent < threshold and old_percents[name] >= threshold:
-                    print("{} toner is {}! ({}% remaining)".format(name, warning, percent))
+                if remaining <= threshold and old_remainings[name] > threshold:
+                    print("{} toner is {}! (~{} pages remaining)".format(name, warning, remaining))
+                    break
 
     os.rename(tmp_path, TONER_FILE)
