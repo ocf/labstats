@@ -21,7 +21,7 @@ def get_top_users(num, start, end):
 
 if __name__ == "__main__":
 	num = 10
-	start = datetime(2014, 2, 15, 9) # 9am feb 15, 2014
+	start = datetime(datetime.now().year, 1 if datetime.now().month < 7 else 7, 1)
 
 	now = True
 	end = datetime.now()
