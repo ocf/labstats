@@ -22,6 +22,10 @@ cat /opt/stats/var/top_users
 echo '</pre>'
 
 echo -e "<pre>============================</pre>\n<pre>"
+cat /opt/stats/var/top_users_alltime
+echo '</pre>'
+
+echo -e "<pre>============================</pre>\n<pre>"
 cat /opt/stats/var/toner
 echo '</pre>'
 

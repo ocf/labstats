@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from labstats import settings, db
 from datetime import datetime, timedelta
+import argparse
 
 def get_top_users(num, start, end):
 	cnx = db.get_connection()
@@ -21,12 +22,33 @@ def get_top_users(num, start, end):
 
 if __name__ == "__main__":
 	num = 10
-	start = datetime(datetime.now().year, 1 if datetime.now().month < 7 else 7, 1)
-
 	now = True
+	all_time = False
+	start = datetime(datetime.now().year, 1 if datetime.now().month < 7 else 7, 1)
 	end = datetime.now()
 
-	str_range = "between {} and {}" if not now else "since {}".format(start, end)
+	parser = argparse.ArgumentParser(description="Generate list of top lab users")
+	parser.add_argument("--start", type=str, dest="start", \
+                help="Start of interval to generate stats for")
+	parser.add_argument("--end", type=str, dest="end", \
+                help="End of interval to generate stats for")
+	parser.add_argument("--all-time", action="store_true", \
+		dest="all_time", help="Get all-time stats")
+	args = parser.parse_args()
+
+	if args.all_time is True:
+		start = datetime(1970, 1, 1)
+		all_time = True
+	elif args.start is not None:
+		start = datetime.strptime(args.start, "%Y-%m-%d")
+	if args.end is not None and args.all_time is not True:
+		end = datetime.strptime(args.end, "%Y-%m-%d")
+		now = False
+
+	if all_time:
+		str_range = "of all time"
+	else:
+		str_range = ("between {} and {}" if not now else "since {}").format(start, end)
 	print("Top {} users of the lab {}:".format(num, str_range))
 
 	for i, (user, seconds) in enumerate(get_top_users(num, start, end)):
