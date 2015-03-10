@@ -37,16 +37,17 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	if args.all_time is True:
-		start = datetime(1970, 1, 1)
+		start = datetime(2014, 2, 15, 9) # 9am feb 15, 2014
 		all_time = True
-	elif args.start is not None:
-		start = datetime.strptime(args.start, "%Y-%m-%d")
-	if args.end is not None and args.all_time is not True:
-		end = datetime.strptime(args.end, "%Y-%m-%d")
-		now = False
+	else:
+		if args.start is not None:
+			start = datetime.strptime(args.start, "%Y-%m-%d")
+		if args.end is not None:
+			end = datetime.strptime(args.end, "%Y-%m-%d")
+			now = False
 
 	if all_time:
-		str_range = "of all time"
+		str_range = "since records began on {}".format(start)
 	else:
 		str_range = ("between {} and {}" if not now else "since {}").format(start, end)
 	print("Top {} users of the lab {}:".format(num, str_range))
