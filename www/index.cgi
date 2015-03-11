@@ -14,7 +14,7 @@ echo '
 echo '<img src="/lab-usage-graph.svg"></img>'
 
 echo -e "<pre>============================</pre>\n<pre>"
-/opt/stats/labstats/labstats/stats/who.py
+cat /opt/stats/var/current_users
 echo "</pre>"
 
 echo -e "<pre>============================</pre>\n<pre>"

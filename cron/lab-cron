@@ -4,6 +4,12 @@ export PYTHONPATH=/opt/stats/labstats
 # close old sessions
 /opt/stats/labstats/labstats/bin/close_old_sessions.py
 
+# current users
+tmp=$(mktemp)
+/opt/stats/labstats/labstats/stats/who.py > "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/current_users
+
 # utilization graph
 tmp=$(mktemp --suffix=".svg")
 /opt/stats/labstats/labstats/stats/utilization-graph.py --destination "$tmp"
