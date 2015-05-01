@@ -6,6 +6,7 @@
 <?php
 $printers = array();
 $global_max = 0;
+$since = isset($_GET['since']) ? intval($_GET['since']) : 0;
 
 foreach (glob("/opt/stats/var/printing/oracle/*.csv") as $fn) {
   $this_printer = array();
@@ -17,6 +18,11 @@ foreach (glob("/opt/stats/var/printing/oracle/*.csv") as $fn) {
   foreach ($rows as $row) {
     $_ = explode(",", $row);
     $max_toner = array_pop($_);
+
+    if ($_[0] < $since) {
+        continue;
+    }
+
     $_[0] = sprintf("`%f`", $_[0] * 1000);
     $points[] = $_;
   }
