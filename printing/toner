@@ -2,6 +2,7 @@
 import os
 import os.path
 import re
+import sys
 import tempfile
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -42,18 +43,24 @@ if __name__ == '__main__':
     tmp_file = os.fdopen(tmp_fd, 'w')
     os.fchmod(tmp_fd, 0o644)
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        for name, details in zip(PRINTERS, executor.map(get_toner, PRINTERS)):
-            remaining, pages_per_toner = details
-            printed = pages_per_toner - remaining
-            percent = int(100 * remaining / pages_per_toner)
+    try:
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for name, details in zip(PRINTERS, executor.map(get_toner, PRINTERS)):
+                remaining, pages_per_toner = details
+                printed = pages_per_toner - remaining
+                percent = int(100 * remaining / pages_per_toner)
 
-            print("{}: printed={}, remaining={} ({}%)".format(
-                  name, printed, remaining, percent), file=tmp_file)
+                print("{}: printed={}, remaining={} ({}%)".format(
+                      name, printed, remaining, percent), file=tmp_file)
 
-            for threshold, warning in reversed(THRESHOLDS):
-                if remaining <= threshold and old_remainings[name] > threshold:
-                    print("{} toner is {}! (~{} pages remaining)".format(name, warning, remaining))
-                    break
+                for threshold, warning in reversed(THRESHOLDS):
+                    if remaining <= threshold and old_remainings[name] > threshold:
+                        print("{} toner is {}! (~{} pages remaining)".format(name, warning, remaining))
+                        break
 
-    os.rename(tmp_path, TONER_FILE)
+    except IOError as ex:
+        print("Exception occured: {}".format(ex), file=sys.stderr)
+        print("Not updating toner stats.", file=sys.stderr)
+        sys.exit(1)
+    else:
+        os.rename(tmp_path, TONER_FILE)
