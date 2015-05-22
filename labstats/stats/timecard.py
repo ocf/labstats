@@ -34,7 +34,7 @@ def get_usage_count(user):
 	cnx = db.get_connection()
 	cursor = cnx.cursor()
 
-	time = datetime(2014, 8, 21, 9) # 9am aug 21, 2014
+	time = datetime(2015, 1, 1, 9) # 9am jan 1, 2015
 	now = datetime.now()
 	step = timedelta(minutes=60)
 
