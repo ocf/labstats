@@ -2,7 +2,7 @@
 
 import time, subprocess, os
 
-check_toner = "python /opt/stats/labstats/printing/check_toner/check_toner.py"
+check_toner = "/opt/stats/labstats/printing/check_toner/check_toner.py"
 dest_dir = "/opt/stats/var/printing/oracle/"
 targets = ["deforestation", "logjam"]
 suffix = ".csv"
