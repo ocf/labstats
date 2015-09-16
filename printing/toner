@@ -13,9 +13,6 @@ from ocflib.printing.printers import PRINTERS, get_toner
 TONER_FILE = '/opt/stats/var/toner'
 
 THRESHOLDS = [
-    (3000, 'LOW'),
-    (1000, 'VERY LOW'),
-
     # it claims to have pages left, but at ~300 they become too poor quality
     (300, 'EMPTY')
 ]
@@ -61,6 +58,6 @@ if __name__ == '__main__':
     except IOError as ex:
         print("Exception occured: {}".format(ex), file=sys.stderr)
         print("Not updating toner stats.", file=sys.stderr)
-        sys.exit(1)
+        raise
     else:
         os.rename(tmp_path, TONER_FILE)
