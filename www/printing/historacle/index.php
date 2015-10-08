@@ -5,7 +5,6 @@
 
 <?php
 $printers = array();
-// $global_max = 0;
 
 foreach (glob("/opt/stats/var/printing/history/*.csv") as $fn) {
   $this_printer = array();
@@ -28,7 +27,7 @@ foreach (glob("/opt/stats/var/printing/history/*.csv") as $fn) {
   }
   fclose($fp);
 
-  $this_printer['name'] = substr($fn, 0, strrpos($fn, "."));
+  $this_printer['name'] = basename($fn, '.csv');
   $this_printer['animation'] = "false";
 
   $points = array();
@@ -38,8 +37,6 @@ foreach (glob("/opt/stats/var/printing/history/*.csv") as $fn) {
     $points[] = $_;
   }
   $this_printer['data'] = $points;
-  // $this_printer['max'] = $max_toner;
-  // $global_max = max($global_max, $max_toner);
 
   $printers[] = $this_printer;
 }
@@ -50,7 +47,6 @@ $json = str_replace(array("\"`", "`\""), "", $json);
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
 <script src="https://code.highcharts.com/highcharts.js" type="text/javascript"></script>
-<!-- <script src="js/highcharts.js" type="text/javascript"></script> -->
 <script type="text/javascript">
 var chart;
 $(function () {
@@ -77,8 +73,6 @@ $(function () {
         text: "Pages printed"
       },
       min: 0
-      // max: <?= $global_max ?>
-
     },
     title: {
       text: "Printer Historacle"
