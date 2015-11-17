@@ -5,6 +5,7 @@ import numpy as np
 import sys
 import os
 
+from ocflib.lab.hours import Day
 from labstats import settings, db
 from labstats.stats import utilization
 from datetime import datetime, timedelta, date
@@ -80,9 +81,15 @@ if __name__ == "__main__":
 
 	day = datetime.strptime(args.lookup_date, "%Y-%m-%d")
 
-	start = datetime(day.year, day.month, day.day, 9) # 9am
-	end = datetime(day.year, day.month, day.day, 18) # 6pm
+	d = Day.from_date(day)
 
-	hosts = [h for h in settings.LAB_HOSTNAMES if h not in ("eruption.ocf.berkeley.edu", "blizzard.ocf.berkeley.edu")]
+	if not d.closed_all_day:
+		start = datetime(day.year, day.month, day.day, min(h.open for h in d.hours))
+		end = datetime(day.year, day.month, day.day, max(h.close for h in d.hours))
+	else:
+		start = datetime(day.year, day.month, day.day, 9)
+		end = datetime(day.year, day.month, day.day, 18)
+
+	hosts = [h for h in settings.LAB_HOSTNAMES if h not in ("eruption.ocf.berkeley.edu", "sinkhole.ocf.berkeley.edu")]
 	profiles = [utilization.get_utilization(host, start, end) for host in hosts]
 	generate_image(profiles, hosts, start, end, args.dest)
