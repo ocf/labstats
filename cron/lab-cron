@@ -16,6 +16,11 @@ tmp=$(mktemp --suffix=".svg")
 chmod 644 "$tmp"
 mv "$tmp" /opt/stats/var/lab-usage-graph.svg
 
+tmp=$(mktemp --suffix=".png")
+convert -density 300 /opt/stats/var/lab-usage-graph.svg "$tmp"
+chmod 644 "$tmp"
+mv "$tmp" /opt/stats/var/lab-usage-graph.png
+
 # top users of the semester
 tmp=$(mktemp)
 /opt/stats/labstats/labstats/stats/top_users.py > "$tmp"
