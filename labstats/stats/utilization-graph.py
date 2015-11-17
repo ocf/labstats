@@ -80,9 +80,10 @@ if __name__ == "__main__":
 
 	day = datetime.strptime(args.lookup_date, "%Y-%m-%d")
 
-	start = datetime(day.year, day.month, day.day, 9) # 9am
-	end = datetime(day.year, day.month, day.day, 18) # 6pm
+	lab_open, lab_close = settings.LAB_HOURS[day.weekday()]
+	start = datetime(day.year, day.month, day.day, lab_open)
+	end = datetime(day.year, day.month, day.day, lab_close)
 
-	hosts = [h for h in settings.LAB_HOSTNAMES if h not in ("eruption.ocf.berkeley.edu", "blizzard.ocf.berkeley.edu")]
+	hosts = [h for h in settings.LAB_HOSTNAMES if h not in ("eruption.ocf.berkeley.edu", "sinkhole.ocf.berkeley.edu")]
 	profiles = [utilization.get_utilization(host, start, end) for host in hosts]
 	generate_image(profiles, hosts, start, end, args.dest)
