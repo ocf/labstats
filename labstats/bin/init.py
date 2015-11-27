@@ -5,7 +5,7 @@ import labstats.db as db
 cnx = db.get_connection()
 cursor = cnx.cursor()
 
-print("Creating session table...")
+print('Creating session table...')
 
 query = """
 CREATE TABLE `session` (

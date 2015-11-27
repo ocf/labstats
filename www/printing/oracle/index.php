@@ -13,7 +13,7 @@ foreach (glob("/opt/stats/var/printing/oracle/*.csv") as $fn) {
   $rows = file($fn, FILE_IGNORE_NEW_LINES);
   $this_printer['name'] = substr($fn, 0, strrpos($fn, "."));
   $this_printer['animation'] = "false";
-  
+
   $points = array();
   foreach ($rows as $row) {
     $_ = explode(",", $row);
@@ -29,7 +29,7 @@ foreach (glob("/opt/stats/var/printing/oracle/*.csv") as $fn) {
   $this_printer['data'] = $points;
   // $this_printer['max'] = $max_toner;
   $global_max = max($global_max, $max_toner);
-  
+
   $printers[] = $this_printer;
 }
 $json = json_encode($printers, JSON_NUMERIC_CHECK);
@@ -48,7 +48,7 @@ $(function () {
           useUTC: false
       }
   });
-  
+
   options = {
     chart: {
       renderTo: 'chart',
@@ -80,7 +80,7 @@ $(function () {
     },
     series: <?= $json ?>
   };
-  chart = new Highcharts.Chart(options);  
+  chart = new Highcharts.Chart(options);
 });
 </script>
 <title>Printer Oracle</title>

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-from datetime import datetime, date, timedelta
 import os.path
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 
 DATA_DIR = '/opt/stats/var/printing/history'
 PRINTERS = ('logjam', 'deforestation')
+
 
 def load_data(printer):
     csv_path = os.path.join(DATA_DIR, printer + '.csv')
@@ -15,6 +18,7 @@ def load_data(printer):
             return datetime.fromtimestamp(timestamp), pages
 
         return list(map(read_line, csv))
+
 
 def pages_in_range(data, start, end):
     pages_start = None

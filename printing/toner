@@ -7,7 +7,8 @@ import tempfile
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
-from ocflib.printing.printers import PRINTERS, get_toner
+from ocflib.printing.printers import get_toner
+from ocflib.printing.printers import PRINTERS
 
 
 TONER_FILE = '/opt/stats/var/toner'
@@ -24,7 +25,7 @@ def get_old_remainings():
         return defaultdict(int)
 
     def parse(line):  # this is so bad
-        printer = line.split(":")[0]
+        printer = line.split(':')[0]
         match = re.search('remaining=([0-9]*) ', line)
         return printer, int(match.group(1)) if match else 0
 
@@ -47,17 +48,18 @@ if __name__ == '__main__':
                 printed = pages_per_toner - remaining
                 percent = int(100 * remaining / pages_per_toner)
 
-                print("{}: printed={}, remaining={} ({}%)".format(
+                print('{}: printed={}, remaining={} ({}%)'.format(
                       name, printed, remaining, percent), file=tmp_file)
 
                 for threshold, warning in reversed(THRESHOLDS):
                     if remaining <= threshold and old_remainings[name] > threshold:
-                        print("{} toner is {}! (~{} pages remaining)".format(name, warning, remaining))
+                        print('{} toner is {}! (~{} pages remaining)'.format(
+                            name, warning, remaining))
                         break
 
     except IOError as ex:
-        print("Exception occured: {}".format(ex), file=sys.stderr)
-        print("Not updating toner stats.", file=sys.stderr)
+        print('Exception occured: {}'.format(ex), file=sys.stderr)
+        print('Not updating toner stats.', file=sys.stderr)
         raise
     else:
         os.rename(tmp_path, TONER_FILE)
