@@ -18,13 +18,31 @@ CREATE TABLE `session` (
         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `staff` (
+        `user` varchar(8) NOT NULL,
+        PRIMARY KEY (`user`)
+) ENGINE=InnoDB;
+
 CREATE VIEW `session_duration` AS
     SELECT *, timediff(`end`, `start`) AS `duration` FROM `session`;
 
 CREATE VIEW `session_duration_public` AS
     SELECT `id`, `host`, `start`, `end`, `duration` FROM `session_duration`;
 
+CREATE VIEW `users_in_lab` AS
+    SELECT `user`, `host`, `start` FROM `session` WHERE `end` IS NULL;
+
+CREATE VIEW `users_in_lab_count_public` AS
+    SELECT count(*) as `count` FROM `users_in_lab`;
+
+CREATE VIEW `staff_in_lab_public` AS
+    SELECT `user`, `host`, `start` FROM `users_in_lab` WHERE `user` IN (
+        SELECT `user` FROM `staff`
+    );
+
 GRANT SELECT ON `ocfstats`.`session_duration_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`users_in_lab_count_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`staff_in_lab_public` TO 'anonymous'@'%';
 """
 
 cursor.execute(query)

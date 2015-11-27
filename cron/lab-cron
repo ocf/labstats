@@ -4,6 +4,9 @@ export PYTHONPATH=/opt/stats/labstats
 # close old sessions
 /opt/stats/labstats/labstats/bin/close_old_sessions.py
 
+# update staff
+/opt/stats/labstats/labstats/bin/update_staff.py
+
 # current users
 tmp=$(mktemp)
 /opt/stats/labstats/labstats/stats/who.py > "$tmp"
