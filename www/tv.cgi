@@ -16,7 +16,7 @@ print("""Content-Type: text/html
         </style>
     </head>
     <body>
-        <img src="/lab-usage-graph.png" />
+        <img src="https://www.ocf.berkeley.edu/stats/daily-graph/graph" />
     </body>
 </html>
 """)

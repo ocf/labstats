@@ -11,7 +11,7 @@ echo '
 <body>
 <font size=4>'
 
-echo '<img src="/lab-usage-graph.svg"></img>'
+echo '<img src="https://www.ocf.berkeley.edu/stats/daily-graph/graph"></img>'
 
 echo -e "<pre>============================</pre>\n<pre>"
 cat /opt/stats/var/current_users
@@ -31,10 +31,6 @@ echo '</pre>'
 
 echo '<pre>'
 cat /opt/stats/var/mystoracle
-echo '</pre>'
-
-echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/var/utilization
 echo '</pre>'
 
 

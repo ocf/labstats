@@ -9,18 +9,6 @@ tmp=$(mktemp)
 /opt/stats/labstats/labstats/stats/who.py > "$tmp"
 chmod 644 "$tmp"
 mv "$tmp" /opt/stats/var/current_users
-
-# utilization graph
-tmp=$(mktemp --suffix=".svg")
-/opt/stats/labstats/labstats/stats/utilization-graph.py --destination "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/lab-usage-graph.svg
-
-tmp=$(mktemp --suffix=".png")
-convert -density 300 /opt/stats/var/lab-usage-graph.svg "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/lab-usage-graph.png
-
 # top users of the semester
 tmp=$(mktemp)
 /opt/stats/labstats/labstats/stats/top_users.py > "$tmp"
@@ -32,9 +20,3 @@ tmp=$(mktemp)
 /opt/stats/labstats/labstats/stats/top_users.py --all-time > "$tmp"
 chmod 644 "$tmp"
 mv "$tmp" /opt/stats/var/top_users_alltime
-
-# utilization table
-tmp=$(mktemp)
-/opt/stats/labstats/labstats/stats/utilization.py > "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/utilization
