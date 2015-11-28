@@ -6,20 +6,3 @@ export PYTHONPATH=/opt/stats/labstats
 
 # update staff
 /opt/stats/labstats/labstats/bin/update_staff.py
-
-# current users
-tmp=$(mktemp)
-/opt/stats/labstats/labstats/stats/who.py > "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/current_users
-# top users of the semester
-tmp=$(mktemp)
-/opt/stats/labstats/labstats/stats/top_users.py > "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/top_users
-
-# top users of all time
-tmp=$(mktemp)
-/opt/stats/labstats/labstats/stats/top_users.py --all-time > "$tmp"
-chmod 644 "$tmp"
-mv "$tmp" /opt/stats/var/top_users_alltime

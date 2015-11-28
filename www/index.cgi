@@ -14,18 +14,6 @@ echo '
 echo '<img src="https://www.ocf.berkeley.edu/stats/daily-graph/graph"></img>'
 
 echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/var/current_users
-echo "</pre>"
-
-echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/var/top_users
-echo '</pre>'
-
-echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/var/top_users_alltime
-echo '</pre>'
-
-echo -e "<pre>============================</pre>\n<pre>"
 cat /opt/stats/var/toner
 echo '</pre>'
 

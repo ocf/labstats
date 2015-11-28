@@ -29,6 +29,11 @@ CREATE VIEW `session_duration` AS
 CREATE VIEW `session_duration_public` AS
     SELECT `id`, `host`, `start`, `end`, `duration` FROM `session_duration`;
 
+CREATE VIEW `staff_session_duration_public` AS
+    SELECT * FROM `session_duration` WHERE `user` IN (
+        SELECT `user` FROM `staff`
+    );
+
 CREATE VIEW `users_in_lab` AS
     SELECT `user`, `host`, `start` FROM `session` WHERE `end` IS NULL;
 
@@ -43,6 +48,7 @@ CREATE VIEW `staff_in_lab_public` AS
 GRANT SELECT ON `ocfstats`.`session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`users_in_lab_count_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_in_lab_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`staff_session_duration_public` TO 'anonymous'@'%';
 """
 
 cursor.execute(query)
