@@ -2,8 +2,8 @@
 # TODO: rewrite this
 import time
 
-from ocflib.printing.printers import get_lifetime_pages
-from ocflib.printing.printers import PRINTERS
+from ocflib.lab.printing import get_lifetime_pages
+from ocflib.lab.printing import PRINTERS
 
 dest_dir = '/opt/stats/var/printing/history/'
 suffix = '.csv'
