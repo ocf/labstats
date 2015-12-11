@@ -24,8 +24,7 @@ for target in PRINTERS:
         except:  # File doesn't exist yet
             last = False
         if last != toner[0]:
-            toner.insert(0, now)
-            out_str = ','.join(map(str, toner)) + '\n'
+            out_str = ','.join(map(str, (now,) + toner)) + '\n'
             file.write(out_str)
             print('Updated {target} with new value: {out_str}'.format(
                 target=target,
