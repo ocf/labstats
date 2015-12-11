@@ -14,8 +14,6 @@ echo '
 echo '<img src="https://www.ocf.berkeley.edu/stats/daily-graph/graph"></img>'
 
 echo -e "<pre>============================</pre>\n<pre>"
-cat /opt/stats/var/toner
-echo '</pre>'
 
 echo '<pre>'
 cat /opt/stats/var/mystoracle
