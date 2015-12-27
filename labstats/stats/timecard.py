@@ -25,7 +25,7 @@ def generate_image(usage, user, dest):
     plt.ylabel('# Times Present')
     plt.ylim(0, max(sums) * 1.15)
 
-    plt.title('OCF Lab Timecard for {} (Spring 2015)'.format(user))
+    plt.title('OCF Lab Timecard for {} (Fall 2015)'.format(user))
     plt.savefig(dest, bbox_inches='tight')
 
 
@@ -35,14 +35,14 @@ def get_usage_count(user):
     cnx = db.get_connection()
     cursor = cnx.cursor()
 
-    time = datetime(2015, 1, 1, 9)  # 9am jan 1, 2015
+    time = datetime(2015, 8, 1, 9)  # 9am aug 1, 2015
     now = datetime.now()
     step = timedelta(minutes=60)
 
     def in_lab(time):
         start, end = time, time + step
         query = """
-            SELECT COUNT(*) FROM `session`
+            SELECT COUNT(*) FROM `staff_session_duration_public`
                 WHERE `user` = %s AND (
                     `start` BETWEEN %s AND %s OR
                     `end` BETWEEN %s AND %s OR
