@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-import cgi, sys, os, datetime
+import cgi, sys, os, datetime, socket
 sys.path.append("/opt/stats/labstats")
 import labstats.update
 
-# get host from CN of the SSL client cert
-host = os.environ["SSL_CLIENT_S_DN_CN"]
+# get host from reverse IP address
+ip = os.environ['REMOTE_ADDR']
+host = socket.gethostbyaddr(ip)[0].lower()
 
 # get state and current user from request data (GET/POST)
 form = cgi.FieldStorage()
