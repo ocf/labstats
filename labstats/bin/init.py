@@ -9,18 +9,35 @@ print('Creating session table...')
 
 query = """
 CREATE TABLE `session` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `host` varchar(255) NOT NULL,
-        `user` varchar(8) NOT NULL,
-        `start` datetime NOT NULL,
-        `end` datetime DEFAULT NULL,
-        `last_update` datetime,
-        PRIMARY KEY (`id`)
+    `id` int NOT NULL AUTO_INCREMENT,
+    `host` varchar(255) NOT NULL,
+    `user` varchar(8) NOT NULL,
+    `start` datetime NOT NULL,
+    `end` datetime DEFAULT NULL,
+    `last_update` datetime,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `staff` (
-        `user` varchar(8) NOT NULL,
-        PRIMARY KEY (`user`)
+    `user` varchar(8) NOT NULL,
+    PRIMARY KEY (`user`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `printer_pages` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `date` datetime NOT NULL,
+    `printer` varchar(255) NOT NULL,
+    `value` int(11) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `printer_toner` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `date` datetime NOT NULL,
+    `printer` varchar(255) NOT NULL,
+    `value` int(11) NOT NULL,
+    `max` int(11) NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE VIEW `session_duration` AS
@@ -45,10 +62,18 @@ CREATE VIEW `staff_in_lab_public` AS
         SELECT `user` FROM `staff`
     );
 
+CREATE VIEW `printer_pages_public` AS
+    SELECT `id`, `date`, `printer`, `value` FROM `printer_pages`;
+
+CREATE VIEW `printer_toner_public` AS
+    SELECT `id`, `date`, `printer`, `value`, `max` FROM `printer_toner`;
+
 GRANT SELECT ON `ocfstats`.`session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`users_in_lab_count_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_in_lab_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_session_duration_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`printer_pages_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`printer_toner_public` TO 'anonymous'@'%';
 """
 
 cursor.execute(query)
