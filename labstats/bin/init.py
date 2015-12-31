@@ -11,7 +11,7 @@ query = """
 CREATE TABLE `session` (
     `id` int NOT NULL AUTO_INCREMENT,
     `host` varchar(255) NOT NULL,
-    `user` varchar(8) NOT NULL,
+    `user` varchar(16) NOT NULL,
     `start` datetime NOT NULL,
     `end` datetime DEFAULT NULL,
     `last_update` datetime,
@@ -19,7 +19,7 @@ CREATE TABLE `session` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `staff` (
-    `user` varchar(8) NOT NULL,
+    `user` varchar(16) NOT NULL,
     PRIMARY KEY (`user`)
 ) ENGINE=InnoDB;
 
