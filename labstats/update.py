@@ -86,7 +86,7 @@ def close_old_sessions():
 
 
 def update_staff():
-    staff = list_staff()
+    staff = list(list_staff()) + ['pubstaff']
 
     cnx = db.get_connection()
     cursor = cnx.cursor()
