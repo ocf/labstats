@@ -68,12 +68,22 @@ CREATE VIEW `printer_pages_public` AS
 CREATE VIEW `printer_toner_public` AS
     SELECT `id`, `date`, `printer`, `value`, `max` FROM `printer_toner`;
 
+CREATE VIEW `daily_sessions_public` AS
+    SELECT
+        COUNT(*) as logins,
+            COUNT(DISTINCT `user`) as unique_logins,
+            DATE(start) as date
+        FROM `session`
+        GROUP BY `date`
+        ORDER BY `date` DESC;
+
 GRANT SELECT ON `ocfstats`.`session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`users_in_lab_count_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_in_lab_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`printer_pages_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`printer_toner_public` TO 'anonymous'@'%';
+GRANT SELECT ON `ocfstats`.`daily_sessions_public` TO 'anonymous'@'%';
 """
 
 cursor.execute(query)
