@@ -10,8 +10,12 @@ from labstats import db
 
 
 def generate_image(usage, user, dest):
-    h = lambda h: 12 if h == 0 else (h if h <= 12 else h - 12)
-    p = lambda h: 'am' if h <= 11 else 'pm'
+    def h(h):
+        return 12 if h == 0 else (h if h <= 12 else h - 12)
+
+    def p(h):
+        return 'am' if h <= 11 else 'pm'
+
     hours = ['{}{}'.format(h(hour), p(hour)) for hour in range(24)]
     sums = [sum(usage[h]) for h in range(24)]
 
