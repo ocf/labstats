@@ -2,8 +2,8 @@
 # TODO: rewrite this
 import time
 
-from ocflib.lab.printing import get_toner
-from ocflib.lab.printing import PRINTERS
+from ocflib.printing.printers import get_toner
+from ocflib.printing.printers import PRINTERS
 
 dest_dir = '/opt/stats/var/printing/oracle/'
 suffix = '.csv'

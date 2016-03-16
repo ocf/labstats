@@ -4,7 +4,7 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 
-from ocflib.lab.printing import PRINTERS
+from ocflib.printing.printers import PRINTERS
 
 
 DATA_DIR = '/opt/stats/var/printing/history'
