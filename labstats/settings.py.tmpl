@@ -10,10 +10,3 @@ MYSQL_DB = "labstats"
 # timeout in minutes for when a host should be considered dead
 # (if we don't receive an update within X minutes, end any open sessions)
 HOST_TIMEOUT = 3
-
-# lab hours; most stats are only counted/updated during these hours
-# LAB_HOURS is a dictionary with integers 0..6 as keys for Sunday..Saturday;
-# values are functions which take in an hour and return True or False
-LAB_HOURS = defaultdict(lambda: lambda x: 9 <= x <= 18) # weekdays: 9am-6pm
-LAB_HOURS[0] = lambda x: 12 <= x <= 17 # sundays: 12pm-5pm
-LAB_HOURS[6] = lambda x: 11 <= x <= 18 # saturdays: 11am-6pm
