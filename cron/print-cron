@@ -1,9 +1,8 @@
 #!/bin/bash -e
-/opt/stats/labstats/printing/oracle.py
-/opt/stats/labstats/printing/historacle.py
+/opt/stats/labstats/printing/current_toner.py
+/opt/stats/labstats/printing/lifetime_pages.py
 
-# mystoracle
 tmp=$(mktemp)
-/opt/stats/labstats/printing/mystoracle.py > "$tmp"
+/opt/stats/labstats/printing/pages_per_day.py > "$tmp"
 chmod 644 "$tmp"
 mv "$tmp" /opt/stats/var/mystoracle
