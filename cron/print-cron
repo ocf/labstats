@@ -1,4 +1,6 @@
 #!/bin/bash -e
+export PYTHONPATH=/opt/stats/labstats
+
 /opt/stats/labstats/printing/current_toner.py
 /opt/stats/labstats/printing/lifetime_pages.py
 
