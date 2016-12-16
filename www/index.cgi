@@ -1,6 +1,4 @@
 #!/bin/bash
-export PYTHONPATH=/opt/stats/labstats
-
 echo -e "Content-type: text/html\n\n"
 echo '
 <html>
@@ -10,15 +8,6 @@ echo '
 </head>
 <body>
 <font size=4>'
-
-echo '<img src="https://www.ocf.berkeley.edu/stats/daily-graph/graph"></img>'
-
-echo -e "<pre>============================</pre>\n<pre>"
-
-echo '<pre>'
-cat /opt/stats/var/mystoracle
-echo '</pre>'
-
 
 epoch_30d=$(($(date +%s) - 60*60*24*30))
 epoch_90d=$(($(date +%s) - 60*60*24*90))
