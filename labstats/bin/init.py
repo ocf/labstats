@@ -55,12 +55,15 @@ CREATE VIEW `users_in_lab` AS
     SELECT `user`, `host`, `start` FROM `session` WHERE `end` IS NULL;
 
 CREATE VIEW `users_in_lab_count_public` AS
-    SELECT count(*) as `count` FROM `users_in_lab`;
+    SELECT COUNT(DISTINCT `user`) AS `count` FROM `users_in_lab`;
 
 CREATE VIEW `staff_in_lab_public` AS
     SELECT `user`, `host`, `start` FROM `users_in_lab` WHERE `user` IN (
         SELECT `user` FROM `staff`
     );
+    
+CREATE VIEW `staff_in_lab_count_public` AS
+    SELECT COUNT(DISTINCT `user`) AS `count` FROM `staff_in_lab_public`; 
 
 CREATE VIEW `printer_pages_public` AS
     SELECT `id`, `date`, `printer`, `value` FROM `printer_pages`;
