@@ -29,7 +29,7 @@ def generate_image(usage, user, dest):
     plt.ylabel('# Times Present')
     plt.ylim(0, max(sums) * 1.15)
 
-    plt.title('OCF Lab Timecard for {} (Spring 2016)'.format(user))
+    plt.title('OCF Lab Timecard for {} (Fall 2016)'.format(user))
     plt.savefig(dest, bbox_inches='tight')
 
 
