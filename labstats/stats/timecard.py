@@ -39,8 +39,8 @@ def get_usage_count(user):
     cnx = db.get_connection()
     cursor = cnx.cursor()
 
-    time = datetime(2016, 1, 1, 0)  # 12am jan 1, 2016
-    now = datetime.now()
+    time = datetime(2016, 8, 21, 0)
+    now = datetime(2017, 1, 1, 0)
     step = timedelta(minutes=60)
 
     def in_lab(time):
