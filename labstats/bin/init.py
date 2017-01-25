@@ -61,9 +61,6 @@ CREATE VIEW `staff_in_lab_public` AS
     SELECT `user`, `host`, `start` FROM `users_in_lab` WHERE `user` IN (
         SELECT `user` FROM `staff`
     );
-    
-CREATE VIEW `staff_in_lab_count_public` AS
-    SELECT COUNT(DISTINCT `user`) AS `count` FROM `staff_in_lab_public`; 
 
 CREATE VIEW `printer_pages_public` AS
     SELECT `id`, `date`, `printer`, `value` FROM `printer_pages`;
@@ -83,7 +80,6 @@ CREATE VIEW `daily_sessions_public` AS
 GRANT SELECT ON `ocfstats`.`session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`users_in_lab_count_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_in_lab_public` TO 'anonymous'@'%';
-GRANT SELECT ON `ocfstats`.`staff_in_lab_count_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`staff_session_duration_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`printer_pages_public` TO 'anonymous'@'%';
 GRANT SELECT ON `ocfstats`.`printer_toner_public` TO 'anonymous'@'%';
