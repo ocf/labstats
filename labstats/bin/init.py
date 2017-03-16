@@ -55,7 +55,7 @@ CREATE VIEW `users_in_lab` AS
     SELECT `user`, `host`, `start` FROM `session` WHERE `end` IS NULL;
 
 CREATE VIEW `users_in_lab_count_public` AS
-    SELECT count(*) as `count` FROM `users_in_lab`;
+    SELECT COUNT(DISTINCT `user`) AS `count` FROM `users_in_lab`;
 
 CREATE VIEW `staff_in_lab_public` AS
     SELECT `user`, `host`, `start` FROM `users_in_lab` WHERE `user` IN (
